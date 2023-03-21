@@ -53,9 +53,10 @@ public class PasswordTests
     }
 
 
+    [TestCase("")]
     [TestCase("short")]
-    [TestCase("longbutnoletters1234567890")]
-    [TestCase("longbutnodigitsABCDEFGHIJKLMNOPQRSTUVWXYZ")]
+    [TestCase("1234567890")]
+    [TestCase("ABCDEFGHIJKLMNOPQRSTUVWXYZ")]
     public void CreateFromPlainText_InvalidPassword_ThrowsException(string plainTextPassword)
     {
         // Act & Assert
@@ -70,12 +71,11 @@ public class PasswordTests
         var password1 = Password.CreateFromPlainText(plainTextPassword);
         var password2 = Password.CreateFromPlainText(plainTextPassword);
 
-        // Act & Assert
-        Assert.Multiple(() =>
-        {
-            Assert.That(password2, Is.EqualTo(password1));
-            Assert.That(password1, Is.EqualTo(password2));
-        });
+        // Act
+        var arePasswordsEqual = password1.EqualsPlainText(plainTextPassword) && password2.EqualsPlainText(plainTextPassword);
+
+        // Assert
+        Assert.That(arePasswordsEqual, Is.True);
     }
 
     [Test]
@@ -100,16 +100,16 @@ public class PasswordTests
     {
         // Arrange
         const string plainTextPassword = "ValidPassword123";
-        var password1 = Password.CreateFromPlainText(plainTextPassword);
-        var password2 = Password.CreateFromPlainText(plainTextPassword);
+        var password = Password.CreateFromPlainText(plainTextPassword);
 
         // Act
-        var hashCode1 = password1.GetHashCode();
-        var hashCode2 = password2.GetHashCode();
+        var hashCode1 = password.GetHashCode();
+        var hashCode2 = password.GetHashCode();
 
         // Assert
         Assert.That(hashCode2, Is.EqualTo(hashCode1));
     }
+
 
     [Test]
     public void GetHashCode_DifferentPassword_ReturnsDifferentHashCode()

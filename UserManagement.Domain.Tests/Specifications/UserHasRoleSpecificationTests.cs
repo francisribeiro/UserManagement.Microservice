@@ -9,11 +9,6 @@ public class UserHasRoleSpecificationTests
 {
     private List<User> _users;
 
-    public UserHasRoleSpecificationTests(List<User> users)
-    {
-        _users = users;
-    }
-
     [SetUp]
     public void SetUp()
     {

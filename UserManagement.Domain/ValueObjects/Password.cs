@@ -17,13 +17,9 @@ public class Password
         if (string.IsNullOrWhiteSpace(plainText))
             throw new ArgumentException("Password cannot be null or empty", nameof(plainText));
 
-        // Use a secure hashing algorithm, e.g., \
-        string hashedValue = Hash(plainText);
-        return new Password(hashedValue);
-    }
+        if (!IsValidPassword(plainText))
+            throw new ArgumentException("Invalid password", nameof(plainText));
 
-    private static string Hash(string plainText)
-    {
         // Generate a random salt
         byte[] salt = new byte[128 / 8];
         using (var rng = RandomNumberGenerator.Create())
@@ -31,6 +27,14 @@ public class Password
             rng.GetBytes(salt);
         }
 
+        string hashedValue = Hash(plainText, salt);
+        string saltedHashedValue = $"{Convert.ToBase64String(salt)}:{hashedValue}";
+
+        return new Password(saltedHashedValue);
+    }
+
+    private static string Hash(string plainText, byte[] salt)
+    {
         // Hash the plainText password with the salt
         string hashedPassword = Convert.ToBase64String(KeyDerivation.Pbkdf2(
             password: plainText,
@@ -44,7 +48,30 @@ public class Password
 
     public bool Verify(string plainText)
     {
-        string hashedPlainText = Hash(plainText);
-        return HashedValue == hashedPlainText;
+        var saltHashParts = HashedValue.Split(':');
+        var salt = Convert.FromBase64String(saltHashParts[0]);
+        string hashedPlainText = Hash(plainText, salt);
+
+        return saltHashParts[1] == hashedPlainText;
+    }
+
+    private static bool IsValidPassword(string plainText)
+    {
+        // Add your custom password validation logic here.
+        // For example, checking for a minimum length, presence of digits and letters:
+        int minLength = 8;
+        bool hasLetters = plainText.Any(char.IsLetter);
+        bool hasDigits = plainText.Any(char.IsDigit);
+
+        return plainText.Length >= minLength && hasLetters && hasDigits;
+    }
+
+    public bool EqualsPlainText(string plainText)
+    {
+        var saltAndPassword = HashedValue.Split(':');
+        var salt = Convert.FromBase64String(saltAndPassword[0]);
+        var hashedValue = Hash(plainText, salt);
+
+        return saltAndPassword[1] == hashedValue;
     }
 }

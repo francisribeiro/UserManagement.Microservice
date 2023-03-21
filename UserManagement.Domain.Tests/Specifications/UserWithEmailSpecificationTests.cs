@@ -8,11 +8,6 @@ namespace UserManagement.Domain.Tests.Specifications
     {
         private List<User> _users;
 
-        public UserWithEmailSpecificationTests(List<User> users)
-        {
-            _users = users;
-        }
-
         [SetUp]
         public void SetUp()
         {

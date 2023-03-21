@@ -8,11 +8,6 @@ public class UserLoggedInWithinDateRangeSpecificationTests
 {
     private List<User> _users;
 
-    public UserLoggedInWithinDateRangeSpecificationTests(List<User> users)
-    {
-        _users = users;
-    }
-
     [SetUp]
     public void SetUp()
     {

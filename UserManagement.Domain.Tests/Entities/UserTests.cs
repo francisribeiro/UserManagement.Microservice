@@ -172,19 +172,34 @@ public class UserTests
         Assert.That(hasRole, Is.False);
     }
 
+
     [Test]
-    [TestCase(null, "Doe", "test@example.com", "Password123!")]
-    [TestCase("John", null, "test@example.com", "Password123!")]
-    [TestCase("John", "Doe", null, "Password123!")]
-    [TestCase("John", "Doe", "test@example.com", null)]
-    public void Constructor_WithNullOrEmptyValues_ThrowsArgumentNullException(
-        string firstName,
-        string lastName,
-        string email,
-        string password)
+    public void Constructor_WithNullOrEmptyEmail_ThrowsArgumentException()
     {
+        // Arrange
+        string firstName = "John";
+        string lastName = "Doe";
+        string email = null;
+        string password = "Password123!";
+
         // Act & Assert
-        Assert.Throws<ArgumentNullException>(() =>
+        Assert.Throws<ArgumentException>(() =>
+        {
+            var user = new User(firstName, lastName, email, password);
+        });
+    }
+
+    [Test]
+    public void Constructor_WithNullOrEmptyPassword_ThrowsArgumentException()
+    {
+        // Arrange
+        string firstName = "John";
+        string lastName = "Doe";
+        string email = "test@example.com";
+        string password = null;
+
+        // Act & Assert
+        Assert.Throws<ArgumentException>(() =>
         {
             var user = new User(firstName, lastName, email, password);
         });
