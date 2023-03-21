@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Events\" />
+    <Folder Include="Exceptions\" />
+    <Folder Include="Specifications\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="7.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Repositories\**" />
+    <Compile Remove="Entities\UserRoleTests.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="Repositories\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Repositories\**" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "dgSpecHash": "DTGXR4X0wkzIq33nNpPV3YGmqhZd9Pn05FOrW9Dj6zMQdHRtI5NvedRUCkKxqFb0Mj33WXI7czygODC3H9WTMg==",
+  "success": true,
+  "projectFilePath": "C:\\Code\\microservices\\UserManagement.Microservice\\UserManagement.API\\UserManagement.API.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\s145\\.nuget\\packages\\microsoft.netcore.app.ref\\6.0.14\\microsoft.netcore.app.ref.6.0.14.nupkg.sha512",
+    "C:\\Users\\s145\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\6.0.14\\microsoft.windowsdesktop.app.ref.6.0.14.nupkg.sha512",
+    "C:\\Users\\s145\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\6.0.14\\microsoft.aspnetcore.app.ref.6.0.14.nupkg.sha512",
+    "C:\\Users\\s145\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\6.0.14\\microsoft.netcore.app.host.win-x64.6.0.14.nupkg.sha512"
+  ],
+  "logs": []
+}

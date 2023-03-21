@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "dgSpecHash": "TukQRpNzjjViRQ8NcSCPFW+95iyvAsnWAZy7zpg6Nni9MhWGTmQT5zZxiB1AMreb0wNpppyfwqwnUIgQdxzyHg==",
+  "success": true,
+  "projectFilePath": "C:\\Code\\microservices\\UserManagement.Microservice\\UserManagement.Domain\\UserManagement.Domain.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\s145\\.nuget\\packages\\microsoft.aspnetcore.cryptography.internal\\7.0.4\\microsoft.aspnetcore.cryptography.internal.7.0.4.nupkg.sha512",
+    "C:\\Users\\s145\\.nuget\\packages\\microsoft.aspnetcore.cryptography.keyderivation\\7.0.4\\microsoft.aspnetcore.cryptography.keyderivation.7.0.4.nupkg.sha512",
+    "C:\\Users\\s145\\.nuget\\packages\\microsoft.netcore.app.ref\\6.0.14\\microsoft.netcore.app.ref.6.0.14.nupkg.sha512",
+    "C:\\Users\\s145\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\6.0.14\\microsoft.windowsdesktop.app.ref.6.0.14.nupkg.sha512",
+    "C:\\Users\\s145\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\6.0.14\\microsoft.aspnetcore.app.ref.6.0.14.nupkg.sha512"
+  ],
+  "logs": []
+}
