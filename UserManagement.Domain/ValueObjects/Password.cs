@@ -21,14 +21,14 @@ public class Password
             throw new ArgumentException("Invalid password", nameof(plainText));
 
         // Generate a random salt
-        byte[] salt = new byte[128 / 8];
+        var salt = new byte[128 / 8];
         using (var rng = RandomNumberGenerator.Create())
         {
             rng.GetBytes(salt);
         }
 
-        string hashedValue = Hash(plainText, salt);
-        string saltedHashedValue = $"{Convert.ToBase64String(salt)}:{hashedValue}";
+        var hashedValue = Hash(plainText, salt);
+        var saltedHashedValue = $"{Convert.ToBase64String(salt)}:{hashedValue}";
 
         return new Password(saltedHashedValue);
     }
@@ -36,7 +36,7 @@ public class Password
     private static string Hash(string plainText, byte[] salt)
     {
         // Hash the plainText password with the salt
-        string hashedPassword = Convert.ToBase64String(KeyDerivation.Pbkdf2(
+        var hashedPassword = Convert.ToBase64String(KeyDerivation.Pbkdf2(
             password: plainText,
             salt: salt,
             prf: KeyDerivationPrf.HMACSHA256,
@@ -50,18 +50,16 @@ public class Password
     {
         var saltHashParts = HashedValue.Split(':');
         var salt = Convert.FromBase64String(saltHashParts[0]);
-        string hashedPlainText = Hash(plainText, salt);
+        var hashedPlainText = Hash(plainText, salt);
 
         return saltHashParts[1] == hashedPlainText;
     }
 
     private static bool IsValidPassword(string plainText)
     {
-        // Add your custom password validation logic here.
-        // For example, checking for a minimum length, presence of digits and letters:
-        int minLength = 8;
-        bool hasLetters = plainText.Any(char.IsLetter);
-        bool hasDigits = plainText.Any(char.IsDigit);
+        const int minLength = 8;
+        var hasLetters = plainText.Any(char.IsLetter);
+        var hasDigits = plainText.Any(char.IsDigit);
 
         return plainText.Length >= minLength && hasLetters && hasDigits;
     }

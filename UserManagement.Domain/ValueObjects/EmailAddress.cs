@@ -14,25 +14,23 @@ public class EmailAddress : IEquatable<EmailAddress>
         Value = value;
     }
 
-    private bool IsValid(string email)
+    private static bool IsValid(string email)
     {
-        // Use a simple regular expression or a more robust validation library
         return Regex.IsMatch(email, @"^\S+@\S+\.\S+$");
     }
 
-    public bool Equals(EmailAddress other)
+    public bool Equals(EmailAddress? other)
     {
-        if (other == null) return false;
-        return Value.Equals(other.Value, StringComparison.OrdinalIgnoreCase);
+        return other != null && Value.Equals(other.Value, StringComparison.OrdinalIgnoreCase);
     }
     
     public string GetDomain()
     {
-        int atIndex = Value.IndexOf('@');
-        return Value.Substring(atIndex + 1);
+        var atIndex = Value.IndexOf('@');
+        return Value[(atIndex + 1)..];
     }
 
-    public override bool Equals(object obj) => Equals(obj as EmailAddress);
+    public override bool Equals(object? obj) => Equals(obj as EmailAddress);
     public override int GetHashCode() => Value.ToLowerInvariant().GetHashCode();
     public override string ToString() => Value;
 }
