@@ -177,10 +177,10 @@ public class UserTests
     public void Constructor_WithNullOrEmptyEmail_ThrowsArgumentException()
     {
         // Arrange
-        string firstName = "John";
-        string lastName = "Doe";
+        const string firstName = "John";
+        const string lastName = "Doe";
         string email = null;
-        string password = "Password123!";
+        const string password = "Password123!";
 
         // Act & Assert
         Assert.Throws<ArgumentException>(() =>
@@ -193,9 +193,9 @@ public class UserTests
     public void Constructor_WithNullOrEmptyPassword_ThrowsArgumentException()
     {
         // Arrange
-        string firstName = "John";
-        string lastName = "Doe";
-        string email = "test@example.com";
+        const string firstName = "John";
+        const string lastName = "Doe";
+        const string email = "test@example.com";
         string password = null;
 
         // Act & Assert
@@ -244,7 +244,7 @@ public class UserTests
         });
     }
 
-    private User CreateUser()
+    private static User CreateUser()
     {
         const string firstName = "John";
         const string lastName = "Doe";
