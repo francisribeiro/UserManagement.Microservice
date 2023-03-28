@@ -1,3 +1,4 @@
+using AutoMapper;
 using UserManagement.Domain.Enums;
 using UserManagement.Domain.Entities;
 using UserManagement.Application.DTOs;
@@ -11,10 +12,12 @@ namespace UserManagement.Application.Services;
 public class UserManagementService : IUserManagementService
 {
     private readonly IUserRepository _userRepository;
+    private readonly IMapper _mapper;
 
-    public UserManagementService(IUserRepository userRepository)
+    public UserManagementService(IUserRepository userRepository, IMapper mapper)
     {
         _userRepository = userRepository;
+        _mapper = mapper;
     }
 
     public async Task<UserDto> CreateUserAsync(UserCreateDto userCreateDto)
@@ -59,9 +62,7 @@ public class UserManagementService : IUserManagementService
         if (user == null)
             throw new UserNotFoundException(id);
 
-        user.FirstName = userUpdateDto.FirstName;
-        user.LastName = userUpdateDto.LastName;
-        user.Email = userUpdateDto.Email;
+        _mapper.Map(userUpdateDto, user);
 
         await _userRepository.UpdateAsync(user);
     }
