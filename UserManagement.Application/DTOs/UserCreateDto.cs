@@ -1,6 +1,6 @@
 namespace UserManagement.Application.DTOs;
 
-public class UserCreateDTO
+public class UserCreateDto
 {
     public string FirstName { get; set; }
     public string LastName { get; set; }

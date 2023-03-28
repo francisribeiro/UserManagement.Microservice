@@ -55,7 +55,7 @@ public class UserTests
         var role = new Role(UserRoleType.Administrator);
 
         // Act
-        user.AddRole(role);
+        user.AssignRole(role);
 
         // Assert
         Assert.That(user.HasRole(UserRoleType.Administrator), Is.True);
@@ -67,7 +67,7 @@ public class UserTests
         // Arrange
         var user = CreateUser();
         var role = new Role(UserRoleType.Administrator);
-        user.AddRole(role);
+        user.AssignRole(role);
 
         // Act
         user.RemoveRole(role);
@@ -127,10 +127,10 @@ public class UserTests
         // Arrange
         var user = CreateUser();
         var role = new Role(UserRoleType.Administrator);
-        user.AddRole(role);
+        user.AssignRole(role);
 
         // Act & Assert
-        Assert.Throws<UserRoleException>(() => user.AddRole(role));
+        Assert.Throws<UserRoleException>(() => user.AssignRole(role));
     }
 
     [Test]
@@ -150,7 +150,7 @@ public class UserTests
         // Arrange
         var user = CreateUser();
         var role = new Role(UserRoleType.Administrator);
-        user.AddRole(role);
+        user.AssignRole(role);
 
         // Act
         var hasRole = user.HasRole(UserRoleType.Administrator);
@@ -212,7 +212,7 @@ public class UserTests
         var user = CreateUser();
 
         // Act & Assert
-        Assert.Throws<ArgumentNullException>(() => user.AddRole(null));
+        Assert.Throws<ArgumentNullException>(() => user.AssignRole(null));
     }
 
     [Test]

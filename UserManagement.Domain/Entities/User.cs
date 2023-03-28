@@ -40,7 +40,7 @@ public class User
         DomainEvents.Add(new UserLoggedInEvent(this));
     }
 
-    public void AddRole(Role role)
+    public void AssignRole(Role role)
     {
         if (role == null)
             throw new ArgumentNullException(nameof(role));

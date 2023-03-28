@@ -20,8 +20,8 @@ public class UserHasRoleSpecificationTests
         };
 
         var adminRole = new Role(UserRoleType.Administrator);
-        _users[0].AddRole(adminRole);
-        _users[1].AddRole(adminRole);
+        _users[0].AssignRole(adminRole);
+        _users[1].AssignRole(adminRole);
     }
 
     [Test]

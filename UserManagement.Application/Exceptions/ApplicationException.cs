@@ -6,7 +6,7 @@ public class ApplicationException : Exception
     {
     }
 
-    public ApplicationException(string message)
+    protected ApplicationException(string message)
         : base(message)
     {
     }
