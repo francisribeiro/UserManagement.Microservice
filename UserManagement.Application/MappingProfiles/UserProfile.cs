@@ -15,5 +15,7 @@ public class UserProfile : Profile
                     src => src.UserRoles.Select(ur => ur.Role)
                 )
             );
+        CreateMap<UserCreateDto, User>();
+        CreateMap<UserUpdateDto, User>().ReverseMap();
     }
 }
