@@ -12,18 +12,23 @@ namespace UserManagement.Application.Services;
 
 public class UserManagementService : IUserManagementService
 {
-    private readonly IUserRepository _userRepository;
     private readonly IMapper _mapper;
+    private readonly IUserRepository _userRepository;
+    private readonly IValidationService _validationService;
 
-    public UserManagementService(IUserRepository userRepository, IMapper mapper)
+    public UserManagementService(
+        IUserRepository userRepository,
+        IMapper mapper,
+        IValidationService validationService)
     {
-        _userRepository = userRepository;
         _mapper = mapper;
+        _userRepository = userRepository;
+        _validationService = validationService;
     }
 
     public async Task<UserDto> CreateUserAsync(UserCreateDto userCreateDto)
     {
-        DtoValidator.Validate(userCreateDto);
+        _validationService.Validate(userCreateDto);
 
         var existingUser = await _userRepository.FindByEmailAsync(userCreateDto.Email);
 
@@ -71,7 +76,7 @@ public class UserManagementService : IUserManagementService
 
     public async Task UpdateUserAsync(Guid id, UserUpdateDto userUpdateDto)
     {
-        DtoValidator.Validate(userUpdateDto);
+        _validationService.Validate(userUpdateDto);
 
         var user = await _userRepository.GetByIdAsync(id) ?? throw new UserNotFoundException(id);
 

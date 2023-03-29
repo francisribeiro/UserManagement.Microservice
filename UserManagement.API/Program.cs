@@ -1,4 +1,6 @@
+using UserManagement.Application.Contracts;
 using UserManagement.Application.MappingProfiles;
+using UserManagement.Application.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddAutoMapper(typeof(UserProfile).Assembly);
+builder.Services.AddScoped<IValidationService, ValidationService>();
 
 var app = builder.Build();
 
