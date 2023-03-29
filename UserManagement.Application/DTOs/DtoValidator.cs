@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace UserManagement.Application.Validation;
+namespace UserManagement.Application.DTOs;
 
 public static class DtoValidator
 {

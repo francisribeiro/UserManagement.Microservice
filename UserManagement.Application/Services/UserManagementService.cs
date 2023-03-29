@@ -6,7 +6,7 @@ using UserManagement.Domain.Exceptions;
 using UserManagement.Application.Contracts;
 using UserManagement.Application.Exceptions;
 using UserManagement.Application.Interfaces;
-using UserManagement.Application.Validation;
+using UserManagement.Application.Pagination;
 
 namespace UserManagement.Application.Services;
 
@@ -53,6 +53,20 @@ public class UserManagementService : IUserManagementService
         var users = await _userRepository.GetAllAsync();
 
         return _mapper.Map<IEnumerable<UserDto>>(users);
+    }
+
+    public async Task<PagedResult<UserDto>> GetUsersAsync(int pageNumber, int pageSize)
+    {
+        var pagedUsers = await _userRepository.GetPagedUsersAsync(pageNumber, pageSize);
+
+        return new PagedResult<UserDto>
+        {
+            PageNumber = pagedUsers.PageNumber,
+            PageSize = pagedUsers.PageSize,
+            TotalPages = pagedUsers.TotalPages,
+            TotalRecords = pagedUsers.TotalRecords,
+            Data = pagedUsers.Data.Select(user => new UserDto(user)).ToList()
+        };
     }
 
     public async Task UpdateUserAsync(Guid id, UserUpdateDto userUpdateDto)
