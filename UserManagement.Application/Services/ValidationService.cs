@@ -7,6 +7,9 @@ public class ValidationService : IValidationService
 {
     public void Validate<T>(T dto)
     {
+        if (dto == null)
+            throw new ArgumentNullException(nameof(dto), "Value cannot be null.");
+
         var context = new ValidationContext(dto);
         var results = new List<ValidationResult>();
         var isValid = Validator.TryValidateObject(dto, context, results, true);
