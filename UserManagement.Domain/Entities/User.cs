@@ -12,24 +12,27 @@ public class User
     public string LastName { get; protected set; }
     public EmailAddress Email { get; protected set; }
     public Password Password { get; protected set; }
+    public bool Enabled { get; protected set; }
     public DateTime CreatedAt { get; protected set; }
+    public DateTime? UpdatedAt { get; protected set; }
     public DateTime? LastLogin { get; protected set; }
-    public virtual ICollection<UserRole> UserRoles { get; protected set; }
-    public List<IDomainEvent> DomainEvents { get; } = new List<IDomainEvent>();
+    public virtual ICollection<Role> Roles { get; protected set; }
+    public List<IDomainEvent> DomainEvents { get; } = new();
 
     protected User()
     {
     }
 
-    public User(string firstName, string lastName, string email, string password)
+    public User(string firstName, string lastName, string email, string password, bool enabled = true)
     {
         Id = Guid.NewGuid();
         FirstName = firstName;
         LastName = lastName;
         Email = new EmailAddress(email);
         Password = Password.CreateFromPlainText(password);
+        Enabled = enabled;
         CreatedAt = DateTime.UtcNow;
-        UserRoles = new List<UserRole>();
+        Roles = new HashSet<Role>();
 
         DomainEvents.Add(new UserCreatedEvent(this));
     }
@@ -40,45 +43,67 @@ public class User
         DomainEvents.Add(new UserLoggedInEvent(this));
     }
 
+    private void UpdateUserDate()
+    {
+        UpdatedAt = DateTime.UtcNow;
+        DomainEvents.Add(new UserUpdatedEvent(this));
+    }
+
+    public void UpdateUser(string firstName, string lastName, string email)
+    {
+        FirstName = firstName;
+        LastName = lastName;
+        Email = new EmailAddress(email);
+        UpdateUserDate();
+    }
+
     public void AssignRole(Role role)
     {
-        if (role == null)
-            throw new ArgumentNullException(nameof(role));
+        if (role == null) throw new ArgumentNullException(nameof(role));
+        if (HasRole(role.Type)) throw new UserRoleException("User already has this role.");
 
-        if (HasRole(role.Type))
-            throw new UserRoleException("User already has this role.");
-
-        UserRoles.Add(new UserRole(this, role));
+        Roles.Add(role);
+        UpdateUserDate();
     }
 
     public void RemoveRole(Role role)
     {
-        if (role == null)
-            throw new ArgumentNullException(nameof(role));
+        if (role == null) throw new ArgumentNullException(nameof(role));
+        if (!HasRole(role.Type)) throw new UserRoleException("User does not have this role.");
 
-        var userRole = UserRoles.SingleOrDefault(ur => ur.RoleId == role.Id);
-        if (userRole == null)
-            throw new UserRoleException("User does not have this role.");
-
-        UserRoles.Remove(userRole);
+        Roles.Remove(role);
+        UpdateUserDate();
     }
 
-    public bool HasRole(UserRoleType roleType)
-    {
-        return UserRoles.Any(ur => ur.Role.Type == roleType);
-    }
+    public bool HasRole(UserRoleType roleType) => Roles.Any(r => r.Type == roleType);
 
     public void ChangePassword(string currentPassword, string newPassword)
     {
-        if (!Password.Verify(currentPassword))
-            throw new InvalidOperationException("Current password is incorrect.");
+        if (!Password.Verify(currentPassword)) throw new InvalidOperationException("Current password is incorrect.");
+        if (Password.EqualTo(newPassword))
+            throw new InvalidOperationException("New password cannot be equal to current password.");
 
         Password = Password.CreateFromPlainText(newPassword);
+        DomainEvents.Add(new PasswordChangeEvent(this));
+        UpdateUserDate();
     }
 
     public void ResetPassword(string newPassword)
     {
         Password = Password.CreateFromPlainText(newPassword);
         DomainEvents.Add(new PasswordResetEvent(this));
+        UpdateUserDate();
+    }
+
+    public void Enable()
+    {
+        Enabled = true;
+        UpdateUserDate();
+    }
+
+    public void Disable()
+    {
+        Enabled = false;
+        UpdateUserDate();
     }
 }

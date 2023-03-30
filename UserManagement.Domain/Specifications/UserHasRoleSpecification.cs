@@ -1,4 +1,3 @@
-using System;
 using System.Linq.Expressions;
 using UserManagement.Domain.Entities;
 using UserManagement.Domain.Enums;
@@ -16,6 +15,6 @@ public class UserHasRoleSpecification : Specification<User>
 
     public override Expression<Func<User, bool>> ToExpression()
     {
-        return user => user.UserRoles.Any(ur => ur.Role.Type == _roleType);
+        return user => user.Roles.Any(r => r.Type == _roleType);
     }
 }

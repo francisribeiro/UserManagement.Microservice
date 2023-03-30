@@ -20,7 +20,6 @@ public class Password
         if (!IsValidPassword(plainText))
             throw new ArgumentException("Invalid password", nameof(plainText));
 
-        // Generate a random salt
         var salt = new byte[128 / 8];
         using (var rng = RandomNumberGenerator.Create())
         {
@@ -35,7 +34,6 @@ public class Password
 
     private static string Hash(string plainText, byte[] salt)
     {
-        // Hash the plainText password with the salt
         var hashedPassword = Convert.ToBase64String(KeyDerivation.Pbkdf2(
             password: plainText,
             salt: salt,
@@ -64,7 +62,7 @@ public class Password
         return plainText.Length >= minLength && hasLetters && hasDigits;
     }
 
-    public bool EqualsPlainText(string plainText)
+    public bool EqualTo(string plainText)
     {
         var saltAndPassword = HashedValue.Split(':');
         var salt = Convert.FromBase64String(saltAndPassword[0]);
