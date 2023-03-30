@@ -20,4 +20,16 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.1" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Extensions\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="Extensions\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Extensions\**" />
+  </ItemGroup>
 </Project>
