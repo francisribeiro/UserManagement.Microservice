@@ -7,6 +7,7 @@ using UserManagement.Application.Contracts;
 using UserManagement.Application.Exceptions;
 using UserManagement.Application.Interfaces;
 using UserManagement.Application.Pagination;
+using UserManagement.Application.DTOs.Requests;
 
 namespace UserManagement.Application.Services;
 

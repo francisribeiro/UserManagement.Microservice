@@ -1,6 +1,7 @@
 using UserManagement.Domain.Enums;
 using UserManagement.Application.DTOs;
 using UserManagement.Application.Pagination;
+using UserManagement.Application.DTOs.Requests;
 
 namespace UserManagement.Application.Contracts;
 
