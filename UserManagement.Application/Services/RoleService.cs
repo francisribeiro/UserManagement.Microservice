@@ -50,6 +50,8 @@ namespace UserManagement.Application.Services
         {
             var role = await _roleRepository.GetByIdAsync(id) ?? throw new RoleNotFoundException(id);
 
+            await _roleRepository.EnsureRoleNotInUseAsync(id);
+
             await _roleRepository.DeleteAsync(role);
         }
 
