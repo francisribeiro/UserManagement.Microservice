@@ -7,6 +7,7 @@ namespace UserManagement.Application.Interfaces;
 public interface IUserRepository
 {
     Task<User> GetByIdAsync(Guid id);
+    Task<User> GetByEmailAsync(string email);
     Task<IEnumerable<User>> GetAllAsync();
     Task<PagedResult<User>> GetPagedUsersAsync(int pageNumber, int pageSize);
     Task<User> FindByEmailAsync(string email);

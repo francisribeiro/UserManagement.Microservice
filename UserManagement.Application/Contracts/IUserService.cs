@@ -11,7 +11,7 @@ namespace UserManagement.Application.Contracts
         Task<UserDto> CreateUserAsync(UserCreateDto userCreateDto);
         Task UpdateUserAsync(Guid id, UserUpdateDto userUpdateDto);
         Task<UserDto> GetUserByIdAsync(Guid id);
-        Task<UserDto> GetUserByEmailAsync(Guid id);
+        Task<UserDto> GetUserByEmailAsync(string email);
         Task DeleteUserByIdAsync(Guid id);
 
         // Password management

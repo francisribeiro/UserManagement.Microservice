@@ -52,7 +52,10 @@ public class UserService : IUserService
 
         var user = await _userRepository.GetByIdAsync(id) ?? throw new UserNotFoundException(id);
 
-        _mapper.Map(userUpdateDto, user);
+        if (user.Email.Value != userUpdateDto.Email)
+            await CheckEmailExistsAsync(userUpdateDto.Email);
+
+        user.UpdateUser(userUpdateDto.FirstName, userUpdateDto.LastName, userUpdateDto.Email);
 
         await _userRepository.UpdateAsync(user);
     }
@@ -64,11 +67,11 @@ public class UserService : IUserService
         return user == null ? throw new UserNotFoundException(id) : _mapper.Map<UserDto>(user);
     }
 
-    public async Task<UserDto> GetUserByEmailAsync(Guid id)
+    public async Task<UserDto> GetUserByEmailAsync(string email)
     {
-        var user = await _userRepository.GetByEmailAsync(id);
+        var user = await _userRepository.GetByEmailAsync(email);
 
-        return user == null ? throw new UserNotFoundException(id) : _mapper.Map<UserDto>(user);
+        return user == null ? throw new EmailNotFoundException(email) : _mapper.Map<UserDto>(user);
     }
 
     public async Task DeleteUserByIdAsync(Guid id)
@@ -156,7 +159,15 @@ public class UserService : IUserService
 
     public async Task<UserDto> LoginAsync(string email, string password)
     {
-        throw new NotImplementedException();
+        var user = await _userRepository.FindByEmailAsync(email);
+
+        if (user == null || !user.Password.Verify(password))
+            throw new InvalidCredentialsException();
+
+        user.UpdateLoginDate();
+        await _userRepository.UpdateAsync(user);
+
+        return _mapper.Map<UserDto>(user);
     }
 
     #endregion
