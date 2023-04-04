@@ -22,7 +22,13 @@ public class Role
         
         DomainEvents.Add(new RoleCreatedEvent(this));
     }
-    
+
+    public void UpdateRoleType(UserRoleType newRoleType)
+    {
+        Type = newRoleType;
+        DomainEvents.Add(new RoleUpdatedEvent(this));
+    }
+
     public void AddPermission(Permission permission)
     {
         if (permission == null)
