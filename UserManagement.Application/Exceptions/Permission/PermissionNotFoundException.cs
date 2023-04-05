@@ -1,4 +1,4 @@
-﻿namespace UserManagement.Application.Exceptions;
+﻿namespace UserManagement.Application.Exceptions.Permission;
 
 public class PermissionNotFoundException : Exception
 {

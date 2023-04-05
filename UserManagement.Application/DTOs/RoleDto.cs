@@ -1,5 +1,5 @@
-﻿using UserManagement.Domain.Entities;
-using UserManagement.Domain.Enums;
+﻿using UserManagement.Domain.Enums;
+using UserManagement.Domain.Entities;
 
 namespace UserManagement.Application.DTOs;
 
@@ -29,7 +29,7 @@ public class RoleDto
     /// <param name="id">The unique identifier of the role.</param>
     /// <param name="type">The type of the role.</param>
     /// <param name="permissions">A collection of permissions associated with the role.</param>
-    public RoleDto(Guid id, UserRoleType type, ICollection<PermissionDto> permissions)
+    public RoleDto(Guid id, UserRoleType type, ICollection<PermissionDto>? permissions)
     {
         Id = id;
         Type = type;

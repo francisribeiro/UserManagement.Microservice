@@ -1,7 +1,7 @@
-﻿using UserManagement.Domain.Entities;
-using UserManagement.Domain.Enums;
+﻿using UserManagement.Domain.Enums;
+using UserManagement.Domain.Entities;
 
-namespace UserManagement.Application.Contracts;
+namespace UserManagement.Application.Interfaces;
 
 public interface IRoleRepository
 {

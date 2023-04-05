@@ -1,4 +1,4 @@
-﻿namespace UserManagement.Application.Exceptions;
+﻿namespace UserManagement.Application.Exceptions.Role;
 
 public class RoleNotFoundException : Exception
 {

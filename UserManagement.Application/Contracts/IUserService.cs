@@ -27,7 +27,7 @@ namespace UserManagement.Application.Contracts
         Task<PagedResult<UserDto>> GetUsersListPagedAsync(int pageNumber, int pageSize);
 
         // Authentication
-        Task<UserDto> LoginAsync(string email, string password);
+        Task<UserDto> LoginAsync(LoginRequestDto loginRequestDto);
 
         // Utility
         Task CheckEmailExistsAsync(string email);

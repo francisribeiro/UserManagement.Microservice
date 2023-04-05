@@ -3,7 +3,9 @@ using UserManagement.Domain.Enums;
 using UserManagement.Domain.Entities;
 using UserManagement.Application.DTOs;
 using UserManagement.Application.Contracts;
-using UserManagement.Application.Exceptions;
+using UserManagement.Application.Interfaces;
+using UserManagement.Application.Exceptions.Role;
+using UserManagement.Application.Exceptions.Permission;
 
 namespace UserManagement.Application.Services
 {
@@ -11,11 +13,16 @@ namespace UserManagement.Application.Services
     {
         private readonly IMapper _mapper;
         private readonly IRoleRepository _roleRepository;
+        private readonly IPermissionRepository _permissionRepository;
 
-        public RoleService(IRoleRepository roleRepository, IMapper mapper)
+        public RoleService(
+            IMapper mapper,
+            IRoleRepository roleRepository,
+            IPermissionRepository permissionRepository)
         {
-            _roleRepository = roleRepository;
             _mapper = mapper;
+            _roleRepository = roleRepository;
+            _permissionRepository = permissionRepository;
         }
 
         public async Task<RoleDto> CreateRoleAsync(UserRoleType type)
@@ -37,7 +44,7 @@ namespace UserManagement.Application.Services
             var roleExists = await _roleRepository.RoleExistsAsync(newRoleType);
 
             if (roleExists)
-                throw new RoleAlreadyExistsException(newRoleType);        
+                throw new RoleInUseException(newRoleType);
 
             var role = await _roleRepository.GetByIdAsync(id) ?? throw new RoleNotFoundException(id);
 
@@ -67,6 +74,35 @@ namespace UserManagement.Application.Services
             var roles = await _roleRepository.GetAllAsync();
 
             return _mapper.Map<IEnumerable<RoleDto>>(roles);
+        }
+
+        public async Task<RoleDto> CreatePermissionOnRoleAsync(Guid roleId, Guid permissionId)
+        {
+            var role = await _roleRepository.GetByIdAsync(roleId) ?? throw new RoleNotFoundException(roleId);
+            var permission = await _permissionRepository.GetByIdAsync(permissionId) ??
+                             throw new PermissionNotFoundException(permissionId);
+
+            if (role.HasPermission(permission.Type))
+                throw new PermissionAlreadyExistsException(permissionId);
+
+            role.AddPermission(permission);
+
+            await _roleRepository.UpdateAsync(role);
+
+            return _mapper.Map<RoleDto>(role);
+        }
+
+        public async Task<RoleDto> DeletePermissionFromRoleAsync(Guid roleId, Guid permissionId)
+        {
+            var role = await _roleRepository.GetByIdAsync(roleId) ?? throw new RoleNotFoundException(roleId);
+            var permission = await _permissionRepository.GetByIdAsync(permissionId) ??
+                             throw new PermissionNotFoundException(permissionId);
+
+            role.RemovePermission(permission);
+
+            await _roleRepository.UpdateAsync(role);
+
+            return _mapper.Map<RoleDto>(role);
         }
     }
 }

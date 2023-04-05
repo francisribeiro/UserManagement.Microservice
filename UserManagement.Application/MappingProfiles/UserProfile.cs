@@ -1,6 +1,4 @@
 using AutoMapper;
-using UserManagement.Application.DTOs;
-using UserManagement.Domain.Entities;
 
 namespace UserManagement.Application.MappingProfiles;
 

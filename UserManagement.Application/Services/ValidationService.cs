@@ -1,5 +1,5 @@
-using System.ComponentModel.DataAnnotations;
 using UserManagement.Application.Contracts;
+using System.ComponentModel.DataAnnotations;
 
 namespace UserManagement.Application.Services;
 

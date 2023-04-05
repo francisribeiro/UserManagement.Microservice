@@ -4,10 +4,10 @@ using UserManagement.Domain.Entities;
 using UserManagement.Application.DTOs;
 using UserManagement.Domain.Exceptions;
 using UserManagement.Application.Contracts;
-using UserManagement.Application.Exceptions;
 using UserManagement.Application.Interfaces;
 using UserManagement.Application.Pagination;
 using UserManagement.Application.DTOs.Requests;
+using UserManagement.Application.Exceptions.User;
 
 namespace UserManagement.Application.Services;
 
@@ -113,18 +113,18 @@ public class UserService : IUserService
     public async Task AssignRoleAsync(Guid userId, UserRoleType roleType)
     {
         var user = await _userRepository.GetByIdAsync(userId) ?? throw new UserNotFoundException(userId);
-
+        
         user.AssignRole(new Role(roleType));
-
+        
         await _userRepository.UpdateAsync(user);
     }
 
     public async Task RemoveRoleAsync(Guid userId, UserRoleType roleType)
     {
         var user = await _userRepository.GetByIdAsync(userId) ?? throw new UserNotFoundException(userId);
-
+        
         user.RemoveRole(new Role(roleType));
-
+        
         await _userRepository.UpdateAsync(user);
     }
 
@@ -157,14 +157,17 @@ public class UserService : IUserService
 
     #region Authentication
 
-    public async Task<UserDto> LoginAsync(string email, string password)
+    public async Task<UserDto> LoginAsync(LoginRequestDto loginRequestDto)
     {
-        var user = await _userRepository.FindByEmailAsync(email);
+        _validationService.Validate(loginRequestDto);
+        
+        var user = await _userRepository.FindByEmailAsync(loginRequestDto.Email);
 
-        if (user == null || !user.Password.Verify(password))
+        if (!user.Password.Verify(loginRequestDto.Password))
             throw new InvalidCredentialsException();
 
         user.UpdateLoginDate();
+        
         await _userRepository.UpdateAsync(user);
 
         return _mapper.Map<UserDto>(user);

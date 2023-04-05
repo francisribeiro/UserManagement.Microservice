@@ -4,6 +4,7 @@ using UserManagement.Application.DTOs;
 using UserManagement.Application.Contracts;
 using UserManagement.Application.Interfaces;
 using UserManagement.Application.Exceptions;
+using UserManagement.Application.Exceptions.Permission;
 
 namespace UserManagement.Application.Services;
 public class PermissionService : IPermissionService
@@ -27,7 +28,7 @@ public class PermissionService : IPermissionService
             throw new PermissionAlreadyExistsException(permissionDto.Type);       
 
         var newPermission = new Permission(permissionDto.Type, permissionDto.Description);
-
+        
         await _permissionRepository.CreateAsync(newPermission);
 
         return _mapper.Map<PermissionDto>(newPermission);
@@ -48,7 +49,7 @@ public class PermissionService : IPermissionService
         if (IsPermissionUpdateNeeded(permission, permissionDto))
         {
             permission.Update(permissionDto.Description, permissionDto.Type);
-
+            
             await _permissionRepository.UpdateAsync(permission);
         }
     }
@@ -56,9 +57,9 @@ public class PermissionService : IPermissionService
     public async Task DeletePermissionAsync(Guid id)
     {
         var permission = await _permissionRepository.GetByIdAsync(id) ?? throw new PermissionNotFoundException(id);
-
+        
         await _permissionRepository.EnsurePermissionNotInUseAsync(id);
-
+        
         await _permissionRepository.DeleteAsync(permission);
     }
 

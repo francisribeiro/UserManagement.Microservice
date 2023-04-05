@@ -1,6 +1,7 @@
 ﻿using UserManagement.Domain.Enums;
 
-namespace UserManagement.Application.Exceptions;
+namespace UserManagement.Application.Exceptions.Permission;
+
 public class PermissionAlreadyExistsException : Exception
 {
     public PermissionAlreadyExistsException(string message) : base(message)

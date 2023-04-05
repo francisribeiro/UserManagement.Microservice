@@ -1,6 +1,6 @@
 ﻿using UserManagement.Domain.Enums;
 
-namespace UserManagement.Application.Exceptions;
+namespace UserManagement.Application.Exceptions.Role;
 
 public class RoleInUseException : Exception
 {

@@ -10,4 +10,6 @@ public interface IRoleService
     Task DeleteRoleAsync(Guid id);
     Task<RoleDto> GetRoleByIdAsync(Guid id);
     Task<IEnumerable<RoleDto>> GetRolesListAsync();
+    Task<RoleDto> CreatePermissionOnRoleAsync(Guid roleId, Guid permissionId);
+    Task<RoleDto> DeletePermissionFromRoleAsync(Guid roleId, Guid permissionId);
 }

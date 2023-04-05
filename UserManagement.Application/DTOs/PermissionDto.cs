@@ -1,5 +1,5 @@
-﻿using UserManagement.Domain.Entities;
-using UserManagement.Domain.Enums;
+﻿using UserManagement.Domain.Enums;
+using UserManagement.Domain.Entities;
 
 namespace UserManagement.Application.DTOs;
 
