@@ -21,9 +21,10 @@ public class Permission
         Enabled = enabled;
     }
 
-    public void UpdateDescription(string description)
+    public void Update(string description, PermissionType type)
     {
         Description = description;
+        Type = type;
     }
     
     public void Enable()

@@ -21,6 +21,11 @@ public class PermissionService : IPermissionService
     
     public async Task<PermissionDto> CreatePermissionAsync(PermissionDto permissionDto)
     {
+        var permissionExists = await _permissionRepository.ExistsAsync(permissionDto.Type);
+
+        if (permissionExists)
+            throw new PermissionAlreadyExistsException(permissionDto.Type);       
+
         var newPermission = new Permission(permissionDto.Type, permissionDto.Description);
 
         await _permissionRepository.CreateAsync(newPermission);
@@ -32,11 +37,22 @@ public class PermissionService : IPermissionService
     {
         var permission = await _permissionRepository.GetByIdAsync(id) ?? throw new PermissionNotFoundException(id);
 
-        permission.UpdateDescription(permissionDto.Description);
+        if (permission.Type != permissionDto.Type)
+        {
+            var permissionExists = await _permissionRepository.ExistsAsync(permissionDto.Type);
 
-        await _permissionRepository.UpdateAsync(permission);
+            if (permissionExists)
+                throw new PermissionAlreadyExistsException(permissionDto.Type);         
+        }
+
+        if (IsPermissionUpdateNeeded(permission, permissionDto))
+        {
+            permission.Update(permissionDto.Description, permissionDto.Type);
+
+            await _permissionRepository.UpdateAsync(permission);
+        }
     }
-    
+
     public async Task DeletePermissionAsync(Guid id)
     {
         var permission = await _permissionRepository.GetByIdAsync(id) ?? throw new PermissionNotFoundException(id);
@@ -58,5 +74,10 @@ public class PermissionService : IPermissionService
         var permissions = await _permissionRepository.GetAllAsync();
 
         return _mapper.Map<IEnumerable<PermissionDto>>(permissions);
+    }
+
+    private static bool IsPermissionUpdateNeeded(Permission permission, PermissionDto permissionDto)
+    {
+        return permission.Type != permissionDto.Type || permission.Description != permissionDto.Description;
     }
 }
