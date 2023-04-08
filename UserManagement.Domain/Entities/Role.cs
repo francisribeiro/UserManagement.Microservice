@@ -9,6 +9,7 @@ public class Role
     public UserRoleType Type { get; protected set; }
     public virtual ICollection<Permission> Permissions { get; protected set; }
     public List<IDomainEvent> DomainEvents { get; } = new();
+    public object Users { get; set; }
 
     protected Role()
     {
