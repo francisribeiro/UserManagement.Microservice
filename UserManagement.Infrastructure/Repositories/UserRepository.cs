@@ -1,31 +1,95 @@
-// using System.Linq;
-// using Microsoft.EntityFrameworkCore;
-// using UserManagement.Domain.Entities;
-// using UserManagement.Application.Interfaces;
-// using UserManagement.Application.Pagination;
-//
-// namespace UserManagement.Infrastructure.Repositories;
-//
-// public class UserRepository : IUserRepository
-// {
-//     // Other methods and constructor remain the same
-//
-//     public async Task<PagedResult<User>> GetPagedUsersAsync(int pageNumber, int pageSize)
-//     {
-//         var totalRecords = await _dbContext.Users.CountAsync();
-//         var totalPages = (int)Math.Ceiling(totalRecords / (double)pageSize);
-//         var data = await _dbContext.Users
-//             .Skip((pageNumber - 1) * pageSize)
-//             .Take(pageSize)
-//             .ToListAsync();
-//
-//         return new PagedResult<User>
-//         {
-//             PageNumber = pageNumber,
-//             PageSize = pageSize,
-//             TotalPages = totalPages,
-//             TotalRecords = totalRecords,
-//             Data = data
-//         };
-//     }
-// }
+using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using UserManagement.Application.DTOs;
+using UserManagement.Application.Interfaces;
+using UserManagement.Application.Pagination;
+using UserManagement.Domain.Entities;
+using UserManagement.Domain.Specifications;
+using UserManagement.Infrastructure.Persistence;
+
+namespace UserManagement.Infrastructure.Repositories;
+
+public class UserRepository : IUserRepository
+{
+    private readonly UserManagementDbContext _dbContext;
+    private readonly IMapper _mapper;
+
+    public UserRepository(UserManagementDbContext dbContext, IMapper mapper)
+    {
+        _dbContext = dbContext;
+        _mapper = mapper;
+    }
+
+    public async Task<User?> GetByIdAsync(Guid id)
+    {
+        return await _dbContext.Users.FindAsync(id);
+    }
+
+    public async Task<User?> GetByEmailAsync(string email)
+    {
+        return await _dbContext.Users.SingleOrDefaultAsync(u => u.Email.Value == email);
+    }
+
+    public async Task<IEnumerable<User?>> GetAllAsync()
+    {
+        return await _dbContext.Users.ToListAsync();
+    }
+
+    public async Task<PagedResult<User>> GetPagedUsersAsync(int pageNumber, int pageSize)
+    {
+        var skip = (pageNumber - 1) * pageSize;
+        var totalRecords = await _dbContext.Users.CountAsync();
+        var totalPages = (int)Math.Ceiling((double)totalRecords / pageSize);
+
+        var users = await _dbContext.Users
+            .Skip(skip)
+            .Take(pageSize)
+            .ToListAsync();
+
+        var userDtos = _mapper.Map<List<User>>(users);
+
+        return new PagedResult<User>
+        {
+            PageNumber = pageNumber,
+            PageSize = pageSize,
+            TotalPages = totalPages,
+            TotalRecords = totalRecords,
+            Data = userDtos
+        };
+    }
+
+
+    public async Task<User?> FindByEmailAsync(string email)
+    {
+        return await _dbContext.Users.SingleOrDefaultAsync(u => u.Email.Value == email);
+    }
+
+    public async Task<IEnumerable<User?>> FindAsync(Specification<User?> specification)
+    {
+        return await _dbContext.Users.Where(specification.ToExpression()).ToListAsync();
+    }
+
+    public async Task CreateAsync(User? user)
+    {
+        if (user == null) throw new ArgumentNullException(nameof(user));
+
+        await _dbContext.Users.AddAsync(user);
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task UpdateAsync(User? user)
+    {
+        if (user == null) throw new ArgumentNullException(nameof(user));
+
+        _dbContext.Users.Update(user);
+        await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task DeleteAsync(User? user)
+    {
+        if (user == null) throw new ArgumentNullException(nameof(user));
+
+        _dbContext.Users.Remove(user);
+        await _dbContext.SaveChangesAsync();
+    }
+}

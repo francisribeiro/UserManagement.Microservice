@@ -113,18 +113,18 @@ public class UserService : IUserService
     public async Task AssignRoleAsync(Guid userId, UserRoleType roleType)
     {
         var user = await _userRepository.GetByIdAsync(userId) ?? throw new UserNotFoundException(userId);
-        
+
         user.AssignRole(new Role(roleType));
-        
+
         await _userRepository.UpdateAsync(user);
     }
 
     public async Task RemoveRoleAsync(Guid userId, UserRoleType roleType)
     {
         var user = await _userRepository.GetByIdAsync(userId) ?? throw new UserNotFoundException(userId);
-        
+
         user.RemoveRole(new Role(roleType));
-        
+
         await _userRepository.UpdateAsync(user);
     }
 
@@ -160,14 +160,14 @@ public class UserService : IUserService
     public async Task<UserDto> LoginAsync(LoginRequestDto loginRequestDto)
     {
         _validationService.Validate(loginRequestDto);
-        
+
         var user = await _userRepository.FindByEmailAsync(loginRequestDto.Email);
 
-        if (!user.Password.Verify(loginRequestDto.Password))
+        if (user != null && !user.Password.Verify(loginRequestDto.Password))
             throw new InvalidCredentialsException();
 
-        user.UpdateLoginDate();
-        
+        user?.UpdateLoginDate();
+
         await _userRepository.UpdateAsync(user);
 
         return _mapper.Map<UserDto>(user);
