@@ -1,8 +1,8 @@
-using Microsoft.EntityFrameworkCore;
-using UserManagement.Application.Exceptions.Role;
-using UserManagement.Application.Interfaces;
-using UserManagement.Domain.Entities;
 using UserManagement.Domain.Enums;
+using Microsoft.EntityFrameworkCore;
+using UserManagement.Domain.Entities;
+using UserManagement.Application.Interfaces;
+using UserManagement.Application.Exceptions.Role;
 using UserManagement.Infrastructure.Persistence;
 
 namespace UserManagement.Infrastructure.Repositories;
@@ -26,19 +26,19 @@ public class RoleRepository : IRoleRepository
         return await _dbContext.Roles.ToListAsync();
     }
 
-    public async Task CreateAsync(Role? role)
+    public async Task CreateAsync(Role role)
     {
         await _dbContext.Roles.AddAsync(role);
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task UpdateAsync(Role? role)
+    public async Task UpdateAsync(Role role)
     {
         _dbContext.Roles.Update(role);
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task DeleteAsync(Role? role)
+    public async Task DeleteAsync(Role role)
     {
         _dbContext.Roles.Remove(role);
         await _dbContext.SaveChangesAsync();

@@ -161,7 +161,7 @@ public class UserService : IUserService
     {
         _validationService.Validate(loginRequestDto);
 
-        var user = await _userRepository.FindByEmailAsync(loginRequestDto.Email);
+        var user = await _userRepository.GetByEmailAsync(loginRequestDto.Email);
 
         if (user != null && !user.Password.Verify(loginRequestDto.Password))
             throw new InvalidCredentialsException();
@@ -179,7 +179,7 @@ public class UserService : IUserService
 
     public async Task CheckEmailExistsAsync(string email)
     {
-        var existingUser = await _userRepository.FindByEmailAsync(email);
+        var existingUser = await _userRepository.GetByEmailAsync(email);
 
         if (existingUser != null)
             throw new EmailAlreadyExistsException(email);

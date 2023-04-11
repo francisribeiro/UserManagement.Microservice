@@ -1,10 +1,9 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using UserManagement.Application.DTOs;
-using UserManagement.Application.Interfaces;
-using UserManagement.Application.Pagination;
 using UserManagement.Domain.Entities;
 using UserManagement.Domain.Specifications;
+using UserManagement.Application.Pagination;
+using UserManagement.Application.Interfaces;
 using UserManagement.Infrastructure.Persistence;
 
 namespace UserManagement.Infrastructure.Repositories;
@@ -58,37 +57,25 @@ public class UserRepository : IUserRepository
         };
     }
 
-
-    public async Task<User?> FindByEmailAsync(string email)
-    {
-        return await _dbContext.Users.SingleOrDefaultAsync(u => u.Email.Value == email);
-    }
-
     public async Task<IEnumerable<User?>> FindAsync(Specification<User?> specification)
     {
         return await _dbContext.Users.Where(specification.ToExpression()).ToListAsync();
     }
 
-    public async Task CreateAsync(User? user)
+    public async Task CreateAsync(User user)
     {
-        if (user == null) throw new ArgumentNullException(nameof(user));
-
         await _dbContext.Users.AddAsync(user);
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task UpdateAsync(User? user)
+    public async Task UpdateAsync(User user)
     {
-        if (user == null) throw new ArgumentNullException(nameof(user));
-
         _dbContext.Users.Update(user);
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task DeleteAsync(User? user)
+    public async Task DeleteAsync(User user)
     {
-        if (user == null) throw new ArgumentNullException(nameof(user));
-
         _dbContext.Users.Remove(user);
         await _dbContext.SaveChangesAsync();
     }

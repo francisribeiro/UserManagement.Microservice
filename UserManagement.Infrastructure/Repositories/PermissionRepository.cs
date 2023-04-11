@@ -31,7 +31,7 @@ public class PermissionRepository : IPermissionRepository
         return await _context.Permissions.ToListAsync();
     }
 
-    public async Task<Permission?> CreateAsync(Permission? permission)
+    public async Task<Permission?> CreateAsync(Permission permission)
     {
         var result = await _context.Permissions.AddAsync(permission);
         await _context.SaveChangesAsync();
@@ -45,7 +45,7 @@ public class PermissionRepository : IPermissionRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task DeleteAsync(Permission? permission)
+    public async Task DeleteAsync(Permission permission)
     {
         _context.Permissions.Remove(permission);
         await _context.SaveChangesAsync();
