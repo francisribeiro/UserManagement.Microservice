@@ -1,6 +1,6 @@
 using AutoMapper;
 
-namespace UserManagement.Application.MappingProfiles;
+namespace UserManagement.Infrastructure.Mappings;
 
 public class UserProfile : Profile
 {

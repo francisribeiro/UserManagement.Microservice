@@ -1,4 +1,4 @@
-﻿using UserManagement.Application.Services;
+﻿using UserManagement.Infrastructure.Contracts;
 
 namespace UserManagement.Infrastructure.Services;
 

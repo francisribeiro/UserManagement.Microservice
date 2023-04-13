@@ -1,4 +1,4 @@
-﻿namespace UserManagement.Application.Services;
+﻿namespace UserManagement.Infrastructure.Contracts;
 
 public interface IEmailService
 {

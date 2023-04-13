@@ -1,6 +1,6 @@
-using UserManagement.Application.Contracts;
-using UserManagement.Application.MappingProfiles;
 using UserManagement.Application.Services;
+using UserManagement.Application.Contracts;
+using UserManagement.Infrastructure.Mappings;
 
 var builder = WebApplication.CreateBuilder(args);
 

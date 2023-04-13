@@ -16,13 +16,16 @@
 
   <ItemGroup>
     <Compile Remove="Extensions\**" />
+    <Compile Remove="MappingProfiles\**" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Remove="Extensions\**" />
+    <EmbeddedResource Remove="MappingProfiles\**" />
   </ItemGroup>
 
   <ItemGroup>
     <None Remove="Extensions\**" />
+    <None Remove="MappingProfiles\**" />
   </ItemGroup>
 </Project>

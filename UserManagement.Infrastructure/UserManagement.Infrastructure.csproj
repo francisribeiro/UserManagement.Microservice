@@ -8,8 +8,6 @@
 
   <ItemGroup>
     <Folder Include="Configuration\" />
-    <Folder Include="Identity\" />
-    <Folder Include="Mappings\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -19,6 +17,19 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0-preview.2.23128.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.0-preview.2.23128.3" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.28.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Identity\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="Identity\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Identity\**" />
   </ItemGroup>
 
 </Project>
